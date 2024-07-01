@@ -1420,7 +1420,7 @@ terraform apply -auto-approve -no-color
 
 ```bash
 ANS_KEYPAIR="petclinic-ansible-test-dev.key"
-ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ${WORKSPACE}/${ANS_KEYPAIR} ubuntu@172.31.87.73 hostname
+ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ${WORKSPACE}/${ANS_KEYPAIR} ubuntu@172.31.91.243 hostname
 ```
   * Click `Save`
 
@@ -2133,7 +2133,7 @@ git push --set-upstream origin feature/msp-18
 PATH="$PATH:/usr/local/bin"
 APP_REPO_NAME="clarusway-repo/petclinic-app-dev" # Write your own repo name
 AWS_REGION="us-east-1" #Update this line if you work on another region
-ECR_REGISTRY="145569166526.dkr.ecr.us-east-1.amazonaws.com" # Replace this line with your ECR name
+ECR_REGISTRY="046402772087.dkr.ecr.us-east-1.amazonaws.com" # Replace this line with your ECR name
 aws ecr create-repository \
     --repository-name ${APP_REPO_NAME} \
     --image-scanning-configuration scanOnPush=false \
@@ -2502,7 +2502,9 @@ managedNodeGroups:
     desiredCapacity: 2
     minSize: 2
     maxSize: 3
-    volumeSize: 8
+    volumeSize: 20
+    ssh:
+      allow: false
 ```
 
 - Commit the change, then push the script to the remote repo.
@@ -2540,7 +2542,7 @@ eksctl version
 - Download the Amazon EKS vended kubectl binary.
 
 ```bash
-curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.29.0/2024-01-04/bin/linux/amd64/kubectl
+curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.30.0/2024-05-12/bin/linux/amd64/kubectl
 ```
 
 - Apply execute permissions to the binary.
@@ -2583,7 +2585,9 @@ managedNodeGroups:
     desiredCapacity: 2
     minSize: 2
     maxSize: 3
-    volumeSize: 8
+    volumeSize: 20
+    ssh:
+      allow: false
 ```
 
 - Create an EKS cluster via `eksctl`. It will take a while.
@@ -2596,7 +2600,7 @@ eksctl create cluster -f cluster.yaml
 
 ```bash
 export PATH=$PATH:$HOME/bin
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.10.0/deploy/static/provider/cloud/deploy.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.10.1/deploy/static/provider/cloud/deploy.yaml
 ```
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -3085,7 +3089,7 @@ echo \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update
 
-# RKE is not compatible with the current Docker version (v25 hence we need to install an earlier version of Docker)
+# RKE is not compatible with the current Docker version (v27 hence we need to install an earlier version of Docker)
 # List the available versions:
 
 apt-cache madison docker-ce | awk '{ print $3 }'
@@ -3147,7 +3151,7 @@ From ACM            : *.clarusway.us   # change with your dns name
 * Install RKE, the Rancher Kubernetes Engine, [Kubernetes distribution and command-line tool](https://rancher.com/docs/rke/latest/en/installation/)) on Jenkins Server.
 
 ```bash
-curl -SsL "https://github.com/rancher/rke/releases/download/v1.5.6/rke_linux-amd64" -o "rke_linux-amd64"
+curl -SsL "https://github.com/rancher/rke/releases/download/v1.5.10/rke_linux-amd64" -o "rke_linux-amd64"
 sudo mv rke_linux-amd64 /usr/local/bin/rke
 chmod +x /usr/local/bin/rke
 rke --version
